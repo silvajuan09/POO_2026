@@ -81,6 +81,8 @@ class Entrada_Cinema:
     def __init__(self):
         self.__dia = ""
         self.__horario = ""
+        self.__ing_base = 0.0
+        self.__ingresso = 0.0
     def set_dia(self, dia):
         match dia:
             case 'Segunda': self.__dia = dia
@@ -101,23 +103,18 @@ class Entrada_Cinema:
         return self.__horario
     def calc_ingresso(self):
         match self.__dia:
-            case 'Segunda': ing_base = 16
-            case 'Terça': ing_base = 16
-            case 'Quarta': ingresso = 8
-            case 'Quinta': ing_base = 16
-            case 'Sexta': ing_base = 20
-            case 'Sábado': ing_base = 20
-            case 'Domingo': ing_base = 20
+            case 'Segunda': self.__ing_base = 16
+            case 'Terça': self.__ing_base = 16
+            case 'Quarta': self.__ingresso = 8
+            case 'Quinta': self.__ing_base = 16
+            case 'Sexta': self.__ing_base = 20
+            case 'Sábado': self.__ing_base = 20
+            case 'Domingo': self.__ing_base = 20
         if 17 <= self.__horario <= 24 and self.__dia != 'Quarta':
-            ingresso += ing_base/2
+            self.__ingresso += self.__ing_base/2
         else:
-            ingresso = ing_base
-        return ingresso
-        
-
-
-
-
+            self.__ingresso = self.__ing_base
+        return self.__ingresso
 
 # Interface com o usuário
 class UI:
