@@ -21,9 +21,22 @@ class Triangulo:
 class UI:
     @staticmethod
     def main():
-        x = Triangulo()
-        x.set_base(float(input("Informe o valor da base: ")))
-        x.set_altura(float(input("Informe o valor da altura: ")))
+        op = 0
+        while op != 9:
+            op = UI.menu()
+            if op == 1: UI.triangulo()
+    @staticmethod
+    def menu():
+        print("1-Triângulo 9-Fim")
+        op = int(input("Escolha uma opção: "))
+        return op
+    @staticmethod
+    def triangulo():
+        print("Cálculo da área de um triângulo")
+        b = float(input("Informe o valor da base: "))
+        h = float(input("Informe o valor da altura: "))
+        x = Triangulo(b, h)
+        print(x)
         area = x.calc_area()
-        print(f"Um triângulo com base {x.get_base()} e altura \ {x.get_altura()} tem área = {area}")
+        print(f"Um triângulo com base {x.get_base()} e altura {x.get_altura()} tem área = {area}")
 UI.main()
