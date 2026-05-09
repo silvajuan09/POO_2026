@@ -68,7 +68,7 @@ class PlaylistItem:
     def __str__(self): 
         return f"{self.__id} - {self.__idPlaylist} - {self.__idMusica} - {self.__sequencia}"
 
-class UI:
+class PlaylistUI:
     playlists = []
     musicas = []
     playlistItens = []
@@ -76,20 +76,20 @@ class UI:
     def main():
         op = 0
         while op != 14:
-            op = UI.menu()
-            if op == 1: UI.cadastrar_playlist()
-            if op == 2: UI.abrir_playlist()
-            if op == 3: UI.cadastrar_musica()
-            if op == 4: UI.cadastrar_playlistItem()
-            if op == 5: UI.listar_playlists()
-            if op == 6: UI.listar_musicas()
-            if op == 7: UI.listar_playlistItens()
-            if op == 8: UI.atualizar_playlist()
-            if op == 9: UI.atualizar_musica()
-            if op == 10: UI.atualizar_playlistItem()
-            if op == 11: UI.excluir_playlist()
-            if op == 12: UI.excluir_musica()
-            if op == 13: UI.excluir_playlistItem()
+            op = PlaylistUI.menu()
+            if op == 1: PlaylistUI.cadastrar_playlist()
+            if op == 2: PlaylistUI.abrir_playlist()
+            if op == 3: PlaylistUI.cadastrar_musica()
+            if op == 4: PlaylistUI.cadastrar_playlistItem()
+            if op == 5: PlaylistUI.listar_playlists()
+            if op == 6: PlaylistUI.listar_musicas()
+            if op == 7: PlaylistUI.listar_playlistItens()
+            if op == 8: PlaylistUI.atualizar_playlist()
+            if op == 9: PlaylistUI.atualizar_musica()
+            if op == 10: PlaylistUI.atualizar_playlistItem()
+            if op == 11: PlaylistUI.excluir_playlist()
+            if op == 12: PlaylistUI.excluir_musica()
+            if op == 13: PlaylistUI.excluir_playlistItem()
         
     @staticmethod
     def menu():
@@ -167,7 +167,7 @@ class UI:
 
     @classmethod
     def atualizar_playlist(cls):
-        UI.listar_playlists()
+        PlaylistUI.listar_playlists()
         id = int(input('Informe o ID da playlist a ser atualizada: '))
 
         pl_encontrada = None
@@ -186,7 +186,7 @@ class UI:
         
     @classmethod
     def atualizar_musica(cls):
-        UI.listar_musicas()
+        PlaylistUI.listar_musicas()
         id = int(input('Informe o ID da música a ser atualizada: '))
 
         msc_encontrada = None
@@ -208,7 +208,7 @@ class UI:
     
     @classmethod
     def atualizar_playlistItem(cls):
-        UI.listar_playlistItens()
+        PlaylistUI.listar_playlistItens()
         id = int(input('Informe o ID do item de playlist a ser atualizado: '))
 
         plit_encontrado = None
@@ -230,7 +230,7 @@ class UI:
 
     @classmethod
     def excluir_playlist(cls):
-        UI.listar_playlists()
+        PlaylistUI.listar_playlists()
         id = int(input('Informe o ID da playlist a ser excluída: '))
 
         pl_encontrada = None
@@ -245,7 +245,7 @@ class UI:
             print("Playlist não encontrada!")
     @classmethod
     def excluir_musica(cls):
-        UI.listar_musicas()
+        PlaylistUI.listar_musicas()
         id = int(input('Informe o ID da música a ser excluída: '))
 
         msc_encontrada = None
@@ -260,7 +260,7 @@ class UI:
     
     @classmethod
     def excluir_playlistItem(cls):
-        UI.listar_playlistItens()
+        PlaylistUI.listar_playlistItens()
         id = int(input('Informe o ID do item de playlist a ser excluído: '))
 
         plit_encontrado = None
@@ -290,4 +290,4 @@ class UI:
                 if musica.get_id() == item.get_idMusica():
                     print(item.get_sequencia(), '-', musica)
 
-UI.main()
+PlaylistUI.main()
