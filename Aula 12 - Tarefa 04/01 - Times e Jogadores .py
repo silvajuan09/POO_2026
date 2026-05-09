@@ -1,4 +1,4 @@
-class Times:
+class Time:
     def __init__(self, id, nome, estado):
         self.set_id(id)         
         self.set_nome(nome)
@@ -17,7 +17,7 @@ class Times:
     def get_estado(self): return self.__estado
     def __str__(self): return f"{self.__id} - {self.__nome} - {self.__estado}"
 
-class Jogadores:
+class Jogador:
     def __init__(self, id, idTime, nome, camisa):
         self.set_id(id)         
         self.set_idTime(idTime)         
@@ -33,7 +33,7 @@ class Jogadores:
         if nome == '': raise ValueError('Nome não pode ser vazio')
         self.__nome = nome
     def set_camisa(self, camisa): 
-        if len(camisa) < 2: raise ValueError('Preencha ao menos 2 caracteres')
+        if camisa <= 0: raise ValueError('A camisa deve ser positiva')
         self.__camisa = camisa
     def get_id(self): return self.__id
     def get_idTime(self): return self.__idTime
@@ -42,24 +42,24 @@ class Jogadores:
     def __str__(self): return f"{self.__id} - {self.__idTime}- {self.__nome} - {self.__camisa}"
 
 
-class TimesUI:
+class TimeUI:
     times = []   
     jogadores = []    
     @staticmethod
     def main():
         op = 0
         while op != 11:
-            op = TimesUI.menu()
-            if op == 1: TimesUI.inserir_time()
-            if op == 2: TimesUI.listar_times()
-            if op == 3: TimesUI.atualizar_time()
-            if op == 4: TimesUI.excluir_time()
-            if op == 5: TimesUI.inserir_jogador()
-            if op == 6: TimesUI.listar_jogadores()
-            if op == 7: TimesUI.atualizar_jogador()
-            if op == 8: TimesUI.excluir_jogador()
-            if op == 9: TimesUI.listar_jogadores_do_time()
-            if op == 10: TimesUI.transferir_jogador()
+            op = TimeUI.menu()
+            if op == 1: TimeUI.inserir_time()
+            if op == 2: TimeUI.listar_times()
+            if op == 3: TimeUI.atualizar_time()
+            if op == 4: TimeUI.excluir_time()
+            if op == 5: TimeUI.inserir_jogador()
+            if op == 6: TimeUI.listar_jogadores()
+            if op == 7: TimeUI.atualizar_jogador()
+            if op == 8: TimeUI.excluir_jogador()
+            if op == 9: TimeUI.listar_jogadores_do_time()
+            if op == 10: TimeUI.transferir_jogador()
 
     @staticmethod
     def menu():
@@ -71,7 +71,7 @@ class TimesUI:
         id = int(input('Informe o ID do time: '))
         nome = input('Informe o nome do time: ')
         estado = input('Informe o estado de origem do time: ')
-        x = Times(id, nome, estado)
+        x = Time(id, nome, estado)
         cls.times.append(x)
     
     @classmethod
@@ -88,23 +88,22 @@ class TimesUI:
 
     @classmethod
     def atualizar_time(cls):
-        TimesUI.listar_times()
+        TimeUI.listar_times()
         id = int(input("Informe o id do time a ser atualizado: "))
-        x = TimesUI.listar_id(id)
-        if x != None:
-            cls.times.remove(x)
+        x = TimeUI.listar_id(id)
+        if x is not None:   
             nome = input("Informe o novo nome: ")
+            x.set_nome(nome)
             estado = input("Informe o novo estado: ")
-            x = Times(id, nome, estado)
-            cls.times.append(x)
+            x.set_estado(estado)
         else:
             print("Esse time não existe") 
     
     @classmethod
     def excluir_time(cls):
-        TimesUI.listar_times()
+        TimeUI.listar_times()
         id = int(input('Informe o id do time a ser excluído: '))
-        x = TimesUI.listar_id(id)
+        x = TimeUI.listar_id(id)
         if x != None:
             cls.times.remove(x)
         else:
@@ -115,10 +114,17 @@ class TimesUI:
         id = int(input('Informe o ID do jogador: '))
         idTime = int(input('Informe o ID do time do jogador: '))
         nome = input('Informe o nome do jogador: ')
-        camisa = input('Informe a camisa do jogador: ')
-        x = Jogadores(id, idTime, nome, camisa)
+        camisa = int(input('Informe a camisa do jogador: '))
+        x = Jogador(id, idTime, nome, camisa)
         cls.jogadores.append(x)
 
+    @classmethod
+    def listar_id_jogador(cls, id):
+        for j in cls.jogadores:
+            if j.get_id() == id:
+                return j
+        return None
+    
     @classmethod
     def listar_jogadores(cls):
         if len(cls.jogadores) == 0: print('Nenhum jogador inserido')
@@ -127,23 +133,23 @@ class TimesUI:
     
     @classmethod
     def atualizar_jogador(cls):
-        TimesUI.listar_jogadores()
+        TimeUI.listar_jogadores()
         id = int(input("Informe o id do jogador a ser atualizado: "))
+        j = TimeUI.listar_id_jogador(id)
+        if j is not None:   
+            nome = input("Informe o novo nome: ")
+            idTime = int(input("Informe o novo ID do time: "))
+            camisa = int(input("Informe o novo camisa: "))
 
-        for j in cls.jogadores:
-            if j.get_id() == id:
-                cls.jogadores.remove(j)
-                nome = input("Informe o novo nome: ")
-                idTime = int(input("Informe o novo ID do time: "))
-                camisa = input("Informe o novo camisa: ")
-                x = Jogadores(id, idTime, nome, camisa)
-                cls.jogadores.append(x)
-                return
-        print("Jogador não encontrado")
+            j.set_nome(nome)
+            j.set_idTime(idTime)
+            j.set_camisa(camisa)
+        else:
+            print("Jogador não encontrado") 
         
     @classmethod
     def excluir_jogador(cls):
-        TimesUI.listar_jogadores()
+        TimeUI.listar_jogadores()
         id = int(input('Informe o id do jogador a ser excluído: '))
 
         for j in cls.jogadores:
@@ -162,7 +168,7 @@ class TimesUI:
     
     @classmethod
     def transferir_jogador(cls):
-        TimesUI.listar_jogadores()
+        TimeUI.listar_jogadores()
         id = int(input("Informe o id do jogador a ser transferido: "))
         idTime = int(input('Informe o novo ID do time: '))
 
@@ -172,3 +178,5 @@ class TimesUI:
                 print('Jogador transferido')
                 return
         print('Jogador não encontrado')
+
+TimeUI.main()

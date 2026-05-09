@@ -1,4 +1,4 @@
-class PlayList:
+class Playlist:
     def __init__(self, id, nome, descricao):
         self.set_id(id)
         self.set_nome(nome)
@@ -43,18 +43,18 @@ class Musica:
     def __str__(self):
         return f"{self.__id} - {self.__titulo} - {self.__artista} - {self.__album}"
 
-class PlayListItem:
-    def __init__(self, id, idPlayList, idMusica, sequencia):
+class PlaylistItem:
+    def __init__(self, id, idPlaylist, idMusica, sequencia):
         self.set_id(id)
-        self.set_idPlayList(idPlayList)
+        self.set_idPlaylist(idPlaylist)
         self.set_idMusica(idMusica)
         self.set_sequencia(sequencia)
     def set_id(self, id):
         if id < 0: raise ValueError('O ID deve ser positivo')
         self.__id = id
-    def set_idPlayList(self, idPlayList):
-        if idPlayList < 0: raise ValueError('O ID da playlist deve ser positivo')
-        self.__idPlayList = idPlayList
+    def set_idPlaylist(self, idPlaylist):
+        if idPlaylist < 0: raise ValueError('O ID da playlist deve ser positivo')
+        self.__idPlaylist = idPlaylist
     def set_idMusica(self, idMusica):
         if idMusica < 0: raise ValueError('O ID da música deve ser positivo')
         self.__idMusica = idMusica
@@ -62,11 +62,11 @@ class PlayListItem:
         if sequencia < 0: raise ValueError('A ordem da música na playlist deve ser positiva')
         self.__sequencia = sequencia
     def get_id(self): return self.__id
-    def get_idPlayList(self): return self.__idPlayList
+    def get_idPlaylist(self): return self.__idPlaylist
     def get_idMusica(self): return self.__idMusica
     def get_sequencia(self): return self.__sequencia
     def __str__(self): 
-        return f"{self.__id} - {self.__idPlayList} - {self.__idMusica} - {self.__sequencia}"
+        return f"{self.__id} - {self.__idPlaylist} - {self.__idMusica} - {self.__sequencia}"
 
 class UI:
     playlists = []
@@ -75,15 +75,40 @@ class UI:
     @staticmethod
     def main():
         op = 0
-        while op != 4:
+        while op != 14:
             op = UI.menu()
             if op == 1: UI.cadastrar_playlist()
-            if op == 2: UI.cadastrar_musica()
-            if op == 3: UI.cadastrar_playlistItem()
+            if op == 2: UI.abrir_playlist()
+            if op == 3: UI.cadastrar_musica()
+            if op == 4: UI.cadastrar_playlistItem()
+            if op == 5: UI.listar_playlists()
+            if op == 6: UI.listar_musicas()
+            if op == 7: UI.listar_playlistItens()
+            if op == 8: UI.atualizar_playlist()
+            if op == 9: UI.atualizar_musica()
+            if op == 10: UI.atualizar_playlistItem()
+            if op == 11: UI.excluir_playlist()
+            if op == 12: UI.excluir_musica()
+            if op == 13: UI.excluir_playlistItem()
         
     @staticmethod
     def menu():
-        print('1-Cadastrar playlist 2-Cadastrar música 3-Cadastrar item em uma playlist 4-Fim')
+        print('''
+        1-Cadastrar playlist
+        2-Abrir playlist
+        3-Cadastrar música
+        4-Cadastrar item em uma playlist
+        5-Listar playlists 
+        6-Listar músicas
+        7-Listar itens de playlist 
+        8-Atualizar playlist 
+        9-Atualizar música 
+        10-Atualizar item de playlist 
+        11-Excluir playlist 
+        12-Excluir música 
+        13-Excluir item de playlist 
+        14-Fim
+        ''')
         return int(input('Escolha uma opção: '))
 
     @classmethod
@@ -91,7 +116,7 @@ class UI:
         id = int(input('Informe o ID da playlist: '))
         nome = input('Escolha um nome para sua playlist: ')
         descricao = input('Descreva sua playlist: ')
-        x = PlayList(id, nome, descricao)
+        x = Playlist(id, nome, descricao)
         cls.playlists.append(x)
     
     @classmethod
@@ -106,16 +131,163 @@ class UI:
     @classmethod
     def cadastrar_playlistItem(cls):
         id = int(input('Informe o ID do item: '))
-        idPlayList = int(input('Informe o ID da playlist a qual o item será acrescido: '))
+        idPlaylist = int(input('Informe o ID da playlist a qual o item será acrescido: '))
         idMusica = int(input('Informe o ID da música que o item representa: '))
         sequencia = int(input('Informe a ordem do item na playlist: '))
         
         for item in cls.playlistItens:
-            if item.get_idPlayList() == idPlayList and item.get_sequencia() == sequencia:
+            if item.get_idPlaylist() == idPlaylist and item.get_sequencia() == sequencia:
                 print('Já existe uma música nessa posição da playlist')
                 return
             
-        x = PlayListItem(id, idPlayList, idMusica, sequencia)
+        x = PlaylistItem(id, idPlaylist, idMusica, sequencia)
         cls.playlistItens.append(x)
+
+    @classmethod
+    def listar_playlists(cls):
+        if len(cls.playlists) == 0:
+            print('Não há playlists cadastradas!')
+        else:
+            for pl in cls.playlists:
+                print(pl)
+
+    @classmethod
+    def listar_musicas(cls):
+        if len(cls.musicas) == 0: print('Não há músicas cadastradas!')
+        else: 
+            for msc in cls.musicas:
+                print(msc)
+    
+    @classmethod
+    def listar_playlistItens(cls):
+        if len(cls.playlistItens) == 0: print('Não há itens de playlist cadastrados!')
+        else:
+            for plit in cls.playlistItens:
+                print(plit)
+
+    @classmethod
+    def atualizar_playlist(cls):
+        UI.listar_playlists()
+        id = int(input('Informe o ID da playlist a ser atualizada: '))
+
+        pl_encontrada = None
+        for i in cls.playlists:
+            if i.get_id() == id:
+                pl_encontrada = i
+                break
+
+        if pl_encontrada is not None:
+            nome = input("Informe o novo nome: ")
+            pl_encontrada.set_nome(nome)
+            descricao = input("Informe a nova descrição: ")
+            pl_encontrada.set_descricao(descricao)
+        else:
+            print("Playlist não encontrada!") 
+        
+    @classmethod
+    def atualizar_musica(cls):
+        UI.listar_musicas()
+        id = int(input('Informe o ID da música a ser atualizada: '))
+
+        msc_encontrada = None
+        for i in cls.musicas:
+            if i.get_id() == id:
+                msc_encontrada = i
+                break
+
+        if msc_encontrada is not None:
+            titulo = input('Informe o novo título: ')
+            msc_encontrada.set_titulo(titulo)
+
+            artista = input('Informe o novo artista: ')
+            msc_encontrada.set_artista(artista)
+
+            album = input('Informe o novo nome do álbum: ')
+            msc_encontrada.set_album(album)
+        else: print('Música não encontrada!')
+    
+    @classmethod
+    def atualizar_playlistItem(cls):
+        UI.listar_playlistItens()
+        id = int(input('Informe o ID do item de playlist a ser atualizado: '))
+
+        plit_encontrado = None
+        for i in cls.playlistItens:
+            if i.get_id() == id:
+                plit_encontrado = i
+                break
+        
+        if plit_encontrado is not None:
+            idPlaylist = int(input('Informe o novo ID da playlist: '))
+            plit_encontrado.set_idPlaylist(idPlaylist)
+
+            idMusica = int(input('Informe o novo ID da música: '))
+            plit_encontrado.set_idMusica(idMusica)
+
+            sequencia = int(input('Informe a nova sequência do item: '))
+            plit_encontrado.set_sequencia(sequencia)
+        else: print('Item de playlist não encontrado!')
+
+    @classmethod
+    def excluir_playlist(cls):
+        UI.listar_playlists()
+        id = int(input('Informe o ID da playlist a ser excluída: '))
+
+        pl_encontrada = None
+        for i in cls.playlists:
+            if i.get_id() == id:
+                pl_encontrada = i
+                break
+
+        if pl_encontrada is not None:
+            cls.playlists.remove(pl_encontrada)
+        else:
+            print("Playlist não encontrada!")
+    @classmethod
+    def excluir_musica(cls):
+        UI.listar_musicas()
+        id = int(input('Informe o ID da música a ser excluída: '))
+
+        msc_encontrada = None
+        for i in cls.musicas:
+            if i.get_id() == id:
+                msc_encontrada = i
+                break
+
+        if msc_encontrada is not None:
+            cls.musicas.remove(msc_encontrada)
+        else: print('Música não encontrada!')
+    
+    @classmethod
+    def excluir_playlistItem(cls):
+        UI.listar_playlistItens()
+        id = int(input('Informe o ID do item de playlist a ser excluído: '))
+
+        plit_encontrado = None
+        for i in cls.playlistItens:
+            if i.get_id() == id:
+                plit_encontrado = i
+                break
+        
+        if plit_encontrado is not None:
+            cls.playlistItens.remove(plit_encontrado)
+        else: print('Item de playlist não encontrado!')
+
+    @classmethod
+    def abrir_playlist(cls):
+        idPlaylist = int(input('Informe o ID da playlist que vocÊ deseja listar: '))
+
+        itens = []
+
+        for item in cls.playlistItens:
+            if item.get_idPlaylist() == idPlaylist:
+                itens.append(item)
+
+        itens.sort(key=lambda x: x.get_sequencia())
+
+        for item in itens:
+            for musica in cls.musicas:
+                if musica.get_id() == item.get_idMusica():
+                    print(item.get_sequencia(), '-', musica)
 
 UI.main()
