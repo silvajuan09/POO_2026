@@ -22,7 +22,6 @@ class Boleto:
         # supondo que o boleto deve ter 10 dígitos
         if len(cod) != 10: raise ValueError('O código deve ter 10 dígitos')
         self.__cod_barras = cod
-
     def set_data_emissao(self, emissao):
         if emissao > datetime.now(): raise ValueError('A data não pode estar no futuro')
         self.__data_emissao = emissao
@@ -52,7 +51,6 @@ class Boleto:
     def get_situacao_pagamento(self): return self.__situacao_pagamento
     # no diagrama, get_situacao_pagamento está como situacao
     def situacao(self): return self.__situacao_pagamento
-
     def __str__(self):
         s = f"Boleto: {self.__cod_barras} - Emissão {self.__data_emissao.strftime('%d/%m/%Y')}"
         s += f"Vencimento: {self.__data_vencimento.strftime('%d/%m/%Y')}"
@@ -61,4 +59,66 @@ class Boleto:
         s += f"Data de pagamento: {self.__data_pagamento}"
         s += f"{self.__situacao_pagamento}"
         return s
-    # Pode não ter data de pagamento
+        # Pode não ter data de pagamento
+
+class BoletoUI:
+    __boletos = []
+    @staticmethod
+    def main():
+        op = 0
+        while op != 10:
+            op = BoletoUI.menu()
+            if op == 1: BoletoUI.inserir()
+            if op == 2: BoletoUI.listar()
+            if op == 3: BoletoUI.atualizar()
+            if op == 4: BoletoUI.excluir()
+            if op == 5: BoletoUI.abertos()
+            if op == 6: BoletoUI.pagos()
+            if op == 7: BoletoUI.a_vencer()
+            if op == 8: BoletoUI.vencidos()
+            if op == 9: BoletoUI.pagar()
+
+    @staticmethod
+    def menu():
+        print("----------------------------------------------")
+        print(" 1-Inserir, 2-Listar, 3-Atualizar, 4-Excluir  ")
+        print(" 5-Boletos em Aberto, 6-Boletos Pagos         ")
+        print(" 7-Boletos a Vencer,  8-Boletos Vencidos      ")
+        print(" 9-Pagar Boleto,      10-Fim                  ")
+        print("----------------------------------------------")
+        return int(input("Escolha uma opção: "))
+
+
+    @classmethod
+    def inserir(cls):
+        cod = int(input("Informe o código com 10 dígitos: "))
+        emissao = datetime.strptime(input("Informe a data de emissão (dd/mm/yyyy): "), "%d/%m/%Y")
+        venc = datetime.strptime(input("Informe a data de vencimento (dd/mm/yyyy): "), "%d/%m/%Y")
+        valor = float(input("Informe o valor: "))
+        x = Boleto(cod, emissao, venc, valor)
+        cls.__boletos.append(x)
+
+    @classmethod
+    def listar(cls):
+        for x in cls.__boletos: print(x)
+
+    @classmethod
+    def atualizar(cls):
+        cod = int(input("Informe o código de 10 dígitos do boleto a ser atualizado: "))
+        for x in cls.boletos:
+            if x.get_id() == id:
+                emissao = datetime.strptime(input("Informe a nova data de emissão (dd/mm/yyyy): "), "%d/%m/%Y")
+                venc = datetime.strptime(input("Informe a nova data de vencimento (dd/mm/yyyy): "), "%d/%m/%Y")
+                valor = float(input("Informe o novo valor: "))
+                x = Boleto(cod, emissao, venc, valor)
+            else: print("Esse boleto não existe")
+
+    @classmethod
+    def vencidos(cls):
+        for x in cls.__boletos:
+            if x.get_situacao_pagamento() == Pagamento.EM_ABERTO and \
+            x.get_data_vencimento() < datetime.now(): 
+                print(x)
+                          
+                          
+BoletoUI.main()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            

@@ -60,8 +60,7 @@ class TreinoUI:
 
     @classmethod
     def listar_id(cls, id):      
-        for x in cls.times:
-            if x.get_id() == id: return x
+        C: return x
         return None 
 
     @classmethod
