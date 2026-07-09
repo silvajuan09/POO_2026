@@ -8,6 +8,11 @@ class ClienteDAO:
         self.__abrir()
 
     def inserir(self, obj):
+        if self.__objetos:
+            maior_id = max(o.get_id() for o in self.__objetos)
+        else:
+            maior_id = 0
+        obj.set_id(maior_id + 1)
         self.__objetos.append(obj)
         self.__salvar()
     def listar(self):
@@ -17,6 +22,12 @@ class ClienteDAO:
             if obj.get_id() == id:
                 return obj
         return None
+    def listar_nome(self, iniciais):
+        resultado = []
+        for obj in self.__objetos:
+            if obj.get_nome().lower().startswith(iniciais.lower()):
+                resultado.append(obj)
+        return resultado
     def atualizar(self, obj):
         aux = self.listar_id(obj.get_id())
         if aux != None:

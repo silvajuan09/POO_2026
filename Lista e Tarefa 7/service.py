@@ -19,6 +19,10 @@ class Service:
         return ClienteDAO().listar_id(id)
 
     @staticmethod
+    def cliente_listar_nome(iniciais):
+        return ClienteDAO().listar_nome(iniciais)
+    
+    @staticmethod
     def cliente_atualizar(id, nome, email, fone):
         obj = Cliente(id, nome, email, fone)
         ClienteDAO().atualizar(obj)
@@ -41,6 +45,10 @@ class Service:
     @staticmethod
     def servico_listar_id(id):
         return ServicoDAO().listar_id(id)
+    
+    @staticmethod
+    def servico_listar_descricao(iniciais):
+        return ServicoDAO().listar_descricao(iniciais)
 
     @staticmethod
     def servico_atualizar(id, descricao, valor):
