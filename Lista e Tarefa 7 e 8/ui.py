@@ -4,7 +4,7 @@ class UI:
     @staticmethod
     def main():
         op = 0
-        while op != 9:
+        while op != 16:
             op = UI.menu()
             if op == 1: UI.cliente_inserir()
             if op == 2: UI.cliente_listar()
@@ -16,6 +16,11 @@ class UI:
             if op == 8: UI.servico_listar_descricao()
             if op == 9: UI.servico_atualizar()
             if op == 10: UI.servico_excluir()
+            if op == 11: UI.profissional_inserir()
+            if op == 12: UI.profissional_listar()
+            if op == 13: UI.profissional_listar_nome()
+            if op == 14: UI.profissional_atualizar()
+            if op == 15: UI.profissional_excluir()
 
     @staticmethod
     def menu():
@@ -30,7 +35,12 @@ class UI:
         print("8-Pesquisar Serviço por Descrição")
         print("9-Atualizar Serviço")
         print("10-Excluir Serviço")
-        print("0-Sair")
+        print("11-Inserir Profissional")
+        print("12-Listar Profissionais")
+        print("13-Pesquisar Profissional por Nome")
+        print("14-Atualizar Profissional")
+        print("15-Excluir Profissional")
+        print("16-Sair")
         return int(input("Informe uma opção: "))
 
     @staticmethod
@@ -38,7 +48,8 @@ class UI:
         nome = input("Informe o nome: ")
         email = input("Informe o e-mail: ")
         fone = input("Informe o telefone: ")
-        Service.cliente_inserir(0, nome, email, fone)
+        senha = input("Informe a senha: ")
+        Service.cliente_inserir(0, nome, email, fone, senha)
 
     @staticmethod
     def cliente_listar():
@@ -63,7 +74,8 @@ class UI:
         nome = input("Informe o novo nome: ")
         email = input("Informe o novo e-mail: ")
         fone = input("Informe o novo telefone: ")
-        Service.cliente_atualizar(id, nome, email, fone)
+        senha = input("Informe a nova senha: ")
+        Service.cliente_atualizar(id, nome, email, fone, senha)
 
     @staticmethod
     def cliente_excluir():
@@ -110,5 +122,46 @@ class UI:
             print(obj)
         id = int(input("Informe o id do serviço a ser excluído: "))
         Service.servico_excluir(id)
+
+    @staticmethod
+    def profissional_inserir():
+        nome = input("Informe o nome: ")
+        email = input("Informe o e-mail: ")
+        senha = input("Informe a senha: ")
+        especialidade = input("Informe a especialidade: ")
+        Service.profissional_inserir(0, nome, email, senha, especialidade)
+
+    @staticmethod
+    def profissional_listar():
+        for obj in Service.profissional_listar():
+            print(obj)
+
+    @staticmethod
+    def profissional_listar_nome():
+        iniciais = input("Informe as iniciais do nome: ")
+        resultado = Service.profissional_listar_nome(iniciais)
+        if resultado:
+            for obj in resultado:
+                print(obj)
+        else:
+            print("Nenhum profissional encontrado.")
+
+    @staticmethod
+    def profissional_atualizar():
+        for obj in Service.profissional_listar():
+            print(obj)
+        id = int(input("Informe o id do profissional a ser atualizado: "))
+        nome = input("Informe o novo nome: ")
+        email = input("Informe o novo e-mail: ")
+        senha = input("Informe a nova senha: ")
+        especialidade = input("Informe a nova especialidade: ")
+        Service.profissional_atualizar(id, nome, email, senha, especialidade)
+
+    @staticmethod
+    def profissional_excluir():
+        for obj in Service.profissional_listar():
+            print(obj)
+        id = int(input("Informe o id do profissional a ser excluído: "))
+        Service.profissional_excluir(id)
 
 UI.main()
