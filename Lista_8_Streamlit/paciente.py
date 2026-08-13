@@ -23,7 +23,7 @@ class Paciente:
     def get_cpf(self): return self.__cpf
     def get_fone(self): return self.__fone
     def get_nascimento(self): return self.__nascimento
-    def __str__(self): return f"{self.__nome} - {self.__cpf} - {self.__fone} - {self.__nascimento.strftime('%d/%m/%Y')}"
+    def __str__(self): return f"Nome: {self.__nome} - CPF: {self.__cpf} - Telefone: {self.__fone} - Data de nascimento: {self.__nascimento.strftime('%d/%m/%Y')}"
     def idade(self):
         hoje = datetime.now() - self.__nascimento
         dias = hoje.days
