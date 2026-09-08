@@ -6,4 +6,3 @@ from service import Service
 class ManterServicoUI:
     def main():
         st.header('Cadastro de Clientes')
-
