@@ -1,4 +1,5 @@
 from service import Service
+from datetime import datetime
 
 class UI:
     @staticmethod
@@ -94,6 +95,28 @@ class UI:
         for obj in Service().servico_listar(): print(obj)
         id = int(input("Informe o id do serviço a ser excluído: "))
         Service.servico_excluir(id)
+
+    @staticmethod
+    def horario_inserir():
+        data = datetime.strptime(input("Informe o horário: "), "%d/%m/%Y %H:%M")
+        Service.horario_inserir(data)
+
+    @staticmethod
+    def horario_listar():
+        for obj in Service.horario_listar(): print(obj)
+
+    @staticmethod
+    def horario_atualizar():
+        for obj in Service.horario_listar(): print(obj)
+        id = int(input("Informe o id do horário a ser atualizado: "))
+        data = datetime.strptime(input("Informe o novo horário: "), "%d/%m/%Y %H:%M")
+        Service.horario_atualizar(id, data)
+
+    @staticmethod
+    def horario_excluir():
+        for obj in Service.horario_listar(): print(obj)
+        id = int(input("Informe o id do horário a ser excluído: "))
+        Service.horario_excluir(id)
 
     @staticmethod
     def profissional_inserir():
