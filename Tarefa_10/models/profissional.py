@@ -17,7 +17,7 @@ class Profissional:
         self.__email = email
     def set_especialidade(self, especialidade):
         if especialidade == "": raise ValueError("Especialidade deve ser informado")
-        self.__fone = especialidade
+        self.__especialidade = especialidade
     def set_senha(self, senha):
         if senha == "": raise ValueError("A senha deve ser informada")
         self.__senha = senha
@@ -29,11 +29,11 @@ class Profissional:
     def get_senha(self) : return self.__senha
 
     def __str__(self):
-        return f"{self.__id} - {self.__nome} - {self.__email} - {self.__especialidade}"
+        return f"{self.__id} - {self.__nome} - {self.__email} - {self.__especialidade} - {self.__senha}"
    
     def to_json(self):
-        return { "id":self.__id, "nome":self.__nome, "email":self.__email, "especialidade":self.__especialidade }
+        return { "id":self.__id, "nome":self.__nome, "email":self.__email, "especialidade":self.__especialidade, "senha": self.__senha}
    
     @staticmethod
     def from_json(dic):
-        return Profissional(dic["id"], dic["nome"], dic["email"], dic["especialidade"])
+        return Profissional(dic["id"], dic["nome"], dic["email"], dic["especialidade"], dic["senha"])
