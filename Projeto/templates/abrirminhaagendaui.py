@@ -1,6 +1,6 @@
 import streamlit as st
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
 from service import Service
 
 class AbrirMinhaAgendaUI:
@@ -41,29 +41,24 @@ class AbrirMinhaAgendaUI:
                     "%d/%m/%Y %H:%M"
                 )
 
-                if fim <= inicio:
-                    st.error("O horário final deve ser maior que o horário inicial")
-
-                else:
-                    atual = inicio
-
-                    while atual < fim:
-
-                        # Cada repetição cria um horário disponível
-                        # na agenda do profissional que está logado.
-                        Service.horario_inserir(
-                            atual,
-                            False,
-                            None,
-                            None,
-                            st.session_state["usuario_id"]
-                        )
-
-                        atual = atual + timedelta(minutes=int(intervalo))
-
-                    st.success("Agenda aberta com sucesso")
-                    time.sleep(2)
-                    st.rerun()
-
             except ValueError:
                 st.error("Informe a data e os horários no formato indicado")
+                return
+
+            try:
+                quantidade = Service.horario_abrir_agenda(
+                    inicio,
+                    fim,
+                    int(intervalo),
+                    st.session_state["usuario_id"]
+                )
+
+                st.success(
+                    f"Agenda aberta com sucesso! {quantidade} horários cadastrados."
+                )
+
+                time.sleep(2)
+                st.rerun()
+
+            except ValueError as erro:
+                st.error(str(erro))

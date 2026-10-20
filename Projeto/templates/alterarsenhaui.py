@@ -17,23 +17,23 @@ class AlterarSenhaUI:
         )
 
         if st.button("Alterar Senha"):
-
             if nova_senha == "":
                 st.error("Informe a nova senha")
-
             elif nova_senha != confirmar_senha:
                 st.error("As senhas não conferem")
-
             else:
                 # Somente a senha é  da.
                 # O e-mail do admin permanece o mesmo.
-                Service.cliente_alterar_senha(
-                    st.session_state["usuario_id"],
-                    nova_senha
-                )
-
+                if st.session_state["usuario_tipo"] == "profissional":
+                    Service.profissional_alterar_senha(
+                        st.session_state["usuario_id"],
+                        nova_senha
+                    )
+                else:
+                    Service.cliente_alterar_senha(
+                        st.session_state["usuario_id"],
+                        nova_senha
+                    )
                 st.success("Senha alterada com sucesso")
-
                 time.sleep(2)
-
                 st.rerun()

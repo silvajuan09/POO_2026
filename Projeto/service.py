@@ -6,7 +6,7 @@ from models.horario import Horario
 from models.horariodao import HorarioDAO
 from models.profissional import Profissional
 from models.profissionaldao import ProfissionalDAO
-from datetime import datetime
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 class Service:
@@ -108,6 +108,47 @@ class Service:
     @staticmethod
     def horario_excluir(id):
         HorarioDAO().excluir(id)
+
+    @staticmethod
+    def horario_abrir_agenda(inicio, fim, intervalo, id_profissional):
+
+        agora = datetime.now(
+            ZoneInfo("America/Sao_Paulo")
+        ).replace(tzinfo=None)
+
+        if inicio <= agora:
+            raise ValueError("A agenda deve começar em uma data futura")
+
+        if fim <= inicio:
+            raise ValueError("O horário final deve ser maior que o inicial")
+
+        if intervalo <= 0:
+            raise ValueError("O intervalo deve ser positivo")
+
+        existentes = Service.horario_listar_profissional(
+            id_profissional
+        )
+
+        novos_horarios = []
+        atual = inicio
+
+        while atual < fim:
+
+            for h in existentes:
+                if h.get_data() == atual:
+                    raise ValueError(
+                        f"Já existe um horário em {atual:%d/%m/%Y %H:%M}"
+                    )
+
+            novos_horarios.append(atual)
+            atual += timedelta(minutes=intervalo)
+
+        for data in novos_horarios:
+            Service.horario_inserir(
+                data, False, None, None, id_profissional
+            )
+
+        return len(novos_horarios)
 
     @staticmethod
     def horario_listar_disponiveis(id_profissional):
@@ -230,6 +271,6 @@ class Service:
                 id,
                 obj.get_nome(),
                 obj.get_email(),
-                obj.get_fone(),
+                obj.get_especialidade(),
                 senha
             )
