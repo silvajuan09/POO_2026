@@ -12,6 +12,8 @@ from templates.minhaagendaui import MinhaAgendaUI
 from templates.meusservicosui import MeusServicosUI
 from templates.confirmarservicoui import ConfirmarServicoUI
 from templates.alterarsenhaui import AlterarSenhaUI
+from templates.listarhorariosnaoconfirmadoshojeui import ListarHorariosNaoConfirmadosHojeUI
+from templates.listaragendaclienteui import ListarAgendaClienteUI
 from service import Service
 import streamlit as st
 
@@ -44,6 +46,12 @@ class IndexUI:
         if op == "Meus Serviços":
             MeusServicosUI.main()
         
+        if op == "Horários não confirmados de hoje":
+            ListarHorariosNaoConfirmadosHojeUI.main()
+
+        if op == "Agenda de cliente":
+            ListarAgendaClienteUI.main()
+
         if op == "Alterar Senha":
             AlterarSenhaUI.main()
 
@@ -82,6 +90,8 @@ class IndexUI:
                 "Serviços",
                 "Horários",
                 "Profissionais",
+                "Horários não confirmados de hoje",
+                "Agenda de cliente",
                 "Alterar Senha"
             ]
         )
