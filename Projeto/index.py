@@ -46,12 +46,6 @@ class IndexUI:
         if op == "Meus Serviços":
             MeusServicosUI.main()
         
-        if op == "Horários não confirmados de hoje":
-            ListarHorariosNaoConfirmadosHojeUI.main()
-
-        if op == "Agenda de cliente":
-            ListarAgendaClienteUI.main()
-
         if op == "Alterar Senha":
             AlterarSenhaUI.main()
 
@@ -107,6 +101,12 @@ class IndexUI:
 
         if op == "Profissionais":
             ManterProfissionalUI.main()
+
+        if op == "Horários não confirmados de hoje":
+            ListarHorariosNaoConfirmadosHojeUI.main()
+
+        if op == "Agenda de cliente":
+            ListarAgendaClienteUI.main()
 
         if op == "Alterar Senha":
             AlterarSenhaUI.main()
