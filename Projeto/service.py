@@ -191,6 +191,26 @@ class Service:
 
         return len(novos_horarios)
 
+    # Lista os horários de hoje que já foram agendados por um cliente
+    # e ainda não foram confirmados. A lista fica em ordem de horário.
+    @staticmethod
+    def horario_listar_nao_confirmados_hoje():
+        hoje = datetime.now(
+            ZoneInfo("America/Sao_Paulo")
+        ).date()
+
+        r = []
+
+        for h in Service.horario_listar():
+            if h.get_data().date() == hoje \
+            and h.get_id_cliente() not in [None, 0] \
+            and not h.get_confirmado():
+                r.append(h)
+
+        r.sort(key=lambda h: h.get_data())
+
+        return r
+
     @staticmethod
     def horario_listar_disponiveis(id_profissional):
         r = []
