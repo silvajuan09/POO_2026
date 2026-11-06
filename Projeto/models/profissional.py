@@ -11,19 +11,19 @@ class Profissional:
         self.__id = id
 
     def set_nome(self, nome):
-        if nome == "": raise ValueError("Nome deve ser informado")
+        if not nome or not nome.strip(): raise ValueError("Nome deve ser informado")
         self.__nome = nome
 
     def set_email(self, email):
-            if email == "": raise ValueError("E-mail deve ser informado")
+            if not email or not email.strip(): raise ValueError("E-mail deve ser informado")
             self.__email = email
 
     def set_especialidade(self, especialidade):
-            if especialidade == "": raise ValueError("Especialidade deve ser informada")
+            if not especialidade or not especialidade.strip(): raise ValueError("Especialidade deve ser informada")
             self.__especialidade = especialidade
    
     def set_senha(self, senha):
-        if senha == "": raise ValueError("Senha deve ser informada")
+        if not senha or not senha.strip(): raise ValueError("Senha deve ser informada")
         self.__senha = senha
 
     def get_id(self) : return self.__id
