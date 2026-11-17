@@ -1,51 +1,47 @@
 from dao_sql.dao import DAO
 from models.atendimento import Atendimento
+from datetime import datetime
 
 class AtendimentoDAO(DAO):
-    @classmethod
-    def inserir(cls, obj):
-        cls.abrir()
+    
+    def inserir(self, obj):
+        self.abrir()
         sql = """
             INSERT INTO atendimento (data, queixa_principal, historico_saude, avaliacao, prescricao, id_horario)
             VALUES (?, ?, ?, ?, ?, ?)
         """
-        cls.execute(sql, (obj.get_data(), obj.get_queixa_principal(), obj.get_historico_saude(), obj.get_avaliacao(), obj.get_prescricao(), obj.get_id_horario()))
-        cls.fechar()
+        self.execute(sql, (obj.get_data(), obj.get_queixa_principal(), obj.get_historico_saude(), obj.get_avaliacao(), obj.get_prescricao(), obj.get_id_horario()))
+        self.fechar()
 
-
-    @classmethod
-    def listar(cls):
-        cls.abrir()
+    def listar(self):
+        self.abrir()
         sql = "SELECT * FROM atendimento"
-        cursor = cls.execute(sql)
+        cursor = self.execute(sql)
         rows = cursor.fetchall()
         objs = [Atendimento(id, data, queixa_principal, historico_saude, avaliacao, prescricao, id_horario) for (id, data, queixa_principal, historico_saude, avaliacao, prescricao, id_horario) in rows]
-        cls.fechar()
+        self.fechar()
         return objs
 
-    @classmethod
-    def listar_id(cls, id):
-        cls.abrir()
+    def listar_id(self, id):
+        self.abrir()
         sql = "SELECT * FROM atendimento WHERE id = ?"
-        cursor = cls.execute(sql, (id,))
+        cursor = self.execute(sql, (id,))
         row = cursor.fetchone()
         obj = Atendimento(*row) if row else None
-        cls.fechar()
+        self.fechar()
         return obj
 
-    @classmethod
-    def atualizar(cls, obj):
-        cls.abrir()
+    def atualizar(self, obj):
+        self.abrir()
         sql = """
             UPDATE atendimento SET data=?, queixa_principal=?, historico_saude=?, avaliacao=?, prescricao=?, id_horario=?
             WHERE id=?
         """
-        cls.execute(sql, (obj.get_data(), obj.get_queixa_principal(), obj.get_historico_saude(), obj.get_avaliacao(), obj.get_prescricao(), obj.get_id_horario(), obj.get_id()))
-        cls.fechar()
+        self.execute(sql, (obj.get_data(), obj.get_queixa_principal(), obj.get_historico_saude(), obj.get_avaliacao(), obj.get_prescricao(), obj.get_id_horario(), obj.get_id()))
+        self.fechar()
 
-    @classmethod
-    def excluir(cls, id):
-        cls.abrir()
+    def excluir(self, id):
+        self.abrir()
         sql = "DELETE FROM atendimento WHERE id=?"
-        cls.execute(sql, (id,))
-        cls.fechar()
+        self.execute(sql, (id,))
+        self.fechar()

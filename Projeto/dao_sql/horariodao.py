@@ -1,51 +1,48 @@
 from dao_sql.dao import DAO
 from models.horario import Horario
+from datetime import datetime
 
 class HorarioDAO(DAO):
-    @classmethod
-    def inserir(cls, obj):
-        cls.abrir()
+    
+    def inserir(self, obj):
+        self.abrir()
         sql = """
             INSERT INTO horario (data, hora, confirmado, id_cliente, id_servico, id_profissional)
             VALUES (?, ?, ?, ?, ?, ?)
         """
-        cls.execute(sql, (obj.get_data(), obj.get_hora(), obj.get_confirmado(), obj.get_id_cliente(), obj.get_id_servico(), obj.get_id_profissional()))
-        cls.fechar()
+        self.execute(sql, (obj.get_data(), obj.get_hora(), obj.get_confirmado(), obj.get_id_cliente(), obj.get_id_servico(), obj.get_id_profissional()))
+        self.fechar()
 
 
-    @classmethod
-    def listar(cls):
-        cls.abrir()
+    def listar(self):
+        self.abrir()
         sql = "SELECT * FROM horario"
-        cursor = cls.execute(sql)
+        cursor = self.execute(sql)
         rows = cursor.fetchall()
         objs = [Horario(id, data, hora, confirmado, id_cliente, id_servico, id_profissional) for (id, data, hora, confirmado, id_cliente, id_servico, id_profissional) in rows]
-        cls.fechar()
+        self.fechar()
         return objs
 
-    @classmethod
-    def listar_id(cls, id):
-        cls.abrir()
+    def listar_id(self, id):
+        self.abrir()
         sql = "SELECT * FROM horario WHERE id = ?"
-        cursor = cls.execute(sql, (id,))
+        cursor = self.execute(sql, (id,))
         row = cursor.fetchone()
         obj = Horario(*row) if row else None
-        cls.fechar()
+        self.fechar()
         return obj
 
-    @classmethod
-    def atualizar(cls, obj):
-        cls.abrir()
+    def atualizar(self, obj):
+        self.abrir()
         sql = """
             UPDATE horario SET data=?, hora=?, confirmado=?, id_cliente=?, id_servico=?, id_profissional=?
             WHERE id=?
         """
-        cls.execute(sql, (obj.get_data(), obj.get_hora(), obj.get_confirmado(), obj.get_id_cliente(), obj.get_id_servico(), obj.get_id_profissional(), obj.get_id()))
-        cls.fechar()
+        self.execute(sql, (obj.get_data(), obj.get_hora(), obj.get_confirmado(), obj.get_id_cliente(), obj.get_id_servico(), obj.get_id_profissional(), obj.get_id()))
+        self.fechar()
 
-    @classmethod
-    def excluir(cls, id):
-        cls.abrir()
+    def excluir(self, id):
+        self.abrir()
         sql = "DELETE FROM horario WHERE id=?"
-        cls.execute(sql, (id,))
-        cls.fechar()
+        self.execute(sql, (id,))
+        self.fechar()
