@@ -13,6 +13,18 @@ class HorarioDAO(DAO):
         self.execute(sql, (obj.get_data(), obj.get_hora(), obj.get_confirmado(), obj.get_id_cliente(), obj.get_id_servico(), obj.get_id_profissional()))
         self.fechar()
 
+    def _converter_linha(self, row):
+        id, data, confirmado, id_cliente, id_servico, id_profissional = row
+
+        obj = Horario(id, datetime.fromisoformat(data))
+
+        obj.set_confirmado(bool(confirmado))
+        obj.set_id_cliente(id_cliente)
+        obj.set_id_servico(id_servico)
+        obj.set_id_profissional(id_profissional)
+
+        return obj
+
 
     def listar(self):
         self.abrir()

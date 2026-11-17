@@ -6,7 +6,7 @@ class DAO(ABC):
     
     def __init__(self):
         self.conn = None
-        self.nome_bd = "agenda.db"
+        self.nome_bd = str(Path(__file__).resolve().parent.parent / "agenda.db")
 
     def abrir(self):
         self.conn = sqlite3.connect(self.nome_bd)

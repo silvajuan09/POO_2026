@@ -6,6 +6,8 @@ from models.horario import Horario
 from dao_sql.horariodao import HorarioDAO
 from models.profissional import Profissional
 from dao_sql.profissionaldao import ProfissionalDAO
+from models.atendimento import Atendimento
+from dao_sql.atendimentodao import AtendimentoDAO
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
@@ -327,3 +329,56 @@ class Service:
                 obj.get_especialidade(),
                 senha
             )
+
+
+
+    @staticmethod
+    def atendimento_inserir(data, queixa_principal, historico_saude, avaliacao, prescricao, id_horario):
+
+        obj = Atendimento(
+            0,
+            data,
+            queixa_principal,
+            historico_saude,
+            avaliacao,
+            prescricao,
+            id_horario
+        )
+
+        AtendimentoDAO().inserir(obj)
+
+
+    @staticmethod
+    def atendimento_listar():
+
+        r = AtendimentoDAO().listar()
+        r.sort(key=lambda obj: obj.get_data())
+
+        return r
+
+
+    @staticmethod
+    def atendimento_listar_id(id):
+        return AtendimentoDAO().listar_id(id)
+
+
+    @staticmethod
+    def atendimento_atualizar(id, data, queixa_principal, historico_saude, avaliacao, prescricao, id_horario):
+
+        obj = Atendimento(
+            id,
+            data,
+            queixa_principal,
+            historico_saude,
+            avaliacao,
+            prescricao,
+            id_horario
+        )
+
+        AtendimentoDAO().atualizar(obj)
+
+
+    @staticmethod
+    def atendimento_excluir(id):
+
+        AtendimentoDAO().excluir(id)

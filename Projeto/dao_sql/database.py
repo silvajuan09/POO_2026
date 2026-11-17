@@ -1,8 +1,9 @@
 import sqlite3
+from pathlib import Path
 
 class Database:
     conn = None
-    nome_bd = "agenda.db"
+    nome_bd = str(Path(__file__).resolve().parent.parent / "agenda.db")
 
     @classmethod
     def abrir(cls):
@@ -18,6 +19,12 @@ class Database:
         cursor = cls.conn.cursor()
         cursor.execute(sql, params or [])
         cls.conn.commit()
+
+    @classmethod
+    def inicializar(cls):
+        cls.abrir()
+        cls.criar_tabelas()
+        cls.fechar()
 
     @classmethod
     def criar_tabelas(cls):
@@ -83,7 +90,4 @@ class Database:
             );
         """)
 
-if __name__ == "__main__":
-    Database.abrir()
-    Database.criar_tabelas()
-    Database.fechar()
+Database.inicializar()

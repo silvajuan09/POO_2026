@@ -16,6 +16,7 @@ from templates.listarhorariosnaoconfirmadoshojeui import ListarHorariosNaoConfir
 from templates.listaragendaclienteui import ListarAgendaClienteUI
 from service import Service
 import streamlit as st
+from dao_sql.database import Database
 
 class IndexUI:
 
@@ -144,10 +145,8 @@ class IndexUI:
             IndexUI.sair_do_sistema()
 
     def main():
-        # Verifica se existe o usuário admin.
+        Database.inicializar()  
         Service.cliente_criar_admin()
-
-        # Monta o menu lateral.
         IndexUI.sidebar()
 
 
