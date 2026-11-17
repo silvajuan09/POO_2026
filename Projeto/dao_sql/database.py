@@ -23,8 +23,10 @@ class Database:
     @classmethod
     def inicializar(cls):
         cls.abrir()
-        cls.criar_tabelas()
-        cls.fechar()
+        try:
+            cls.criar_tabelas()
+        finally:
+            cls.fechar()
 
     @classmethod
     def criar_tabelas(cls):
@@ -89,5 +91,3 @@ class Database:
                 FOREIGN KEY (id_horario) REFERENCES horario(id) ON DELETE CASCADE
             );
         """)
-
-Database.inicializar()

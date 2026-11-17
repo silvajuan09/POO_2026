@@ -10,15 +10,28 @@ class AtendimentoDAO(DAO):
             INSERT INTO atendimento (data, queixa_principal, historico_saude, avaliacao, prescricao, id_horario)
             VALUES (?, ?, ?, ?, ?, ?)
         """
-        self.execute(sql, (obj.get_data(), obj.get_queixa_principal(), obj.get_historico_saude(), obj.get_avaliacao(), obj.get_prescricao(), obj.get_id_horario()))
+        self.execute(sql, (obj.get_data().isoformat(sep=" "), obj.get_queixa_principal(), obj.get_historico_saude(), obj.get_avaliacao(), obj.get_prescricao(), obj.get_id_horario()))
         self.fechar()
+
+    def _converter_linha(self, row):
+        id, data, queixa, historico, avaliacao, prescricao, id_horario = row
+
+        return Atendimento(
+            id,
+            datetime.fromisoformat(data),
+            queixa,
+            historico,
+            avaliacao,
+            prescricao,
+            id_horario
+        )
 
     def listar(self):
         self.abrir()
         sql = "SELECT * FROM atendimento"
         cursor = self.execute(sql)
         rows = cursor.fetchall()
-        objs = [Atendimento(id, data, queixa_principal, historico_saude, avaliacao, prescricao, id_horario) for (id, data, queixa_principal, historico_saude, avaliacao, prescricao, id_horario) in rows]
+        objs = [self._converter_linha(row) for row in rows]
         self.fechar()
         return objs
 
@@ -27,7 +40,7 @@ class AtendimentoDAO(DAO):
         sql = "SELECT * FROM atendimento WHERE id = ?"
         cursor = self.execute(sql, (id,))
         row = cursor.fetchone()
-        obj = Atendimento(*row) if row else None
+        obj = self._converter_linha(row) if row else None
         self.fechar()
         return obj
 
@@ -37,7 +50,7 @@ class AtendimentoDAO(DAO):
             UPDATE atendimento SET data=?, queixa_principal=?, historico_saude=?, avaliacao=?, prescricao=?, id_horario=?
             WHERE id=?
         """
-        self.execute(sql, (obj.get_data(), obj.get_queixa_principal(), obj.get_historico_saude(), obj.get_avaliacao(), obj.get_prescricao(), obj.get_id_horario(), obj.get_id()))
+        self.execute(sql, (obj.get_data().isoformat(sep=" "), obj.get_queixa_principal(), obj.get_historico_saude(), obj.get_avaliacao(), obj.get_prescricao(), obj.get_id_horario(), obj.get_id()))
         self.fechar()
 
     def excluir(self, id):

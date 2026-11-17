@@ -7,10 +7,10 @@ class HorarioDAO(DAO):
     def inserir(self, obj):
         self.abrir()
         sql = """
-            INSERT INTO horario (data, hora, confirmado, id_cliente, id_servico, id_profissional)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO horario (data, confirmado, id_cliente, id_servico, id_profissional)
+            VALUES (?, ?, ?, ?, ?)
         """
-        self.execute(sql, (obj.get_data(), obj.get_hora(), obj.get_confirmado(), obj.get_id_cliente(), obj.get_id_servico(), obj.get_id_profissional()))
+        self.execute(sql, (obj.get_data().isoformat(sep=" "), obj.get_confirmado(), obj.get_id_cliente(), obj.get_id_servico(), obj.get_id_profissional()))
         self.fechar()
 
     def _converter_linha(self, row):
@@ -31,7 +31,10 @@ class HorarioDAO(DAO):
         sql = "SELECT * FROM horario"
         cursor = self.execute(sql)
         rows = cursor.fetchall()
-        objs = [Horario(id, data, hora, confirmado, id_cliente, id_servico, id_profissional) for (id, data, hora, confirmado, id_cliente, id_servico, id_profissional) in rows]
+        objs = [
+            self._converter_linha(row)
+            for row in rows
+        ]
         self.fechar()
         return objs
 
@@ -40,17 +43,17 @@ class HorarioDAO(DAO):
         sql = "SELECT * FROM horario WHERE id = ?"
         cursor = self.execute(sql, (id,))
         row = cursor.fetchone()
-        obj = Horario(*row) if row else None
+        obj = self._converter_linha(row) if row else None
         self.fechar()
         return obj
 
     def atualizar(self, obj):
         self.abrir()
         sql = """
-            UPDATE horario SET data=?, hora=?, confirmado=?, id_cliente=?, id_servico=?, id_profissional=?
+            UPDATE horario SET data=?, confirmado=?, id_cliente=?, id_servico=?, id_profissional=?
             WHERE id=?
         """
-        self.execute(sql, (obj.get_data(), obj.get_hora(), obj.get_confirmado(), obj.get_id_cliente(), obj.get_id_servico(), obj.get_id_profissional(), obj.get_id()))
+        self.execute(sql, (obj.get_data().isoformat(sep=" "), obj.get_confirmado(), obj.get_id_cliente(), obj.get_id_servico(), obj.get_id_profissional(), obj.get_id()))
         self.fechar()
 
     def excluir(self, id):
