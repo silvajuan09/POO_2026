@@ -6,10 +6,10 @@ class ClienteDAO(DAO):
     def inserir(self, obj):
         self.abrir()
         sql = """
-            INSERT INTO cliente (nome, email, fone, senha)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO cliente (nome, email, fone, senha, foto)
+            VALUES (?, ?, ?, ?, ?)
         """
-        self.execute(sql, (obj.get_nome(), obj.get_email(), obj.get_fone(), obj.get_senha()))
+        self.execute(sql, (obj.get_nome(), obj.get_email(), obj.get_fone(), obj.get_senha(), obj.get_foto()))
         self.fechar()
 
 
@@ -18,7 +18,7 @@ class ClienteDAO(DAO):
         sql = "SELECT * FROM cliente"
         cursor = self.execute(sql)
         rows = cursor.fetchall()
-        objs = [Cliente(id, nome, email, fone, senha) for (id, nome, email, fone, senha) in rows]
+        objs = [Cliente(id, nome, email, fone, senha, foto) for (id, nome, email, fone, senha, foto) in rows]
         self.fechar()
         return objs
 
@@ -34,10 +34,10 @@ class ClienteDAO(DAO):
     def atualizar(self, obj):
         self.abrir()
         sql = """
-            UPDATE cliente SET nome=?, email=?, fone=?, senha=?
+            UPDATE cliente SET nome=?, email=?, fone=?, senha=?, foto=?
             WHERE id=?
         """
-        self.execute(sql, (obj.get_nome(), obj.get_email(), obj.get_fone(), obj.get_senha(), obj.get_id()))
+        self.execute(sql, (obj.get_nome(), obj.get_email(), obj.get_fone(), obj.get_senha(), obj.get_foto(), obj.get_id()))
         self.fechar()
 
     def excluir(self, id):

@@ -6,10 +6,10 @@ class ProfissionalDAO(DAO):
     def inserir(self, obj):
         self.abrir()
         sql = """
-            INSERT INTO profissional (nome, email, especialidade, senha)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO profissional (nome, email, especialidade, senha, foto)
+            VALUES (?, ?, ?, ?, ?)
         """
-        self.execute(sql, (obj.get_nome(), obj.get_email(), obj.get_especialidade(), obj.get_senha()))
+        self.execute(sql, (obj.get_nome(), obj.get_email(), obj.get_especialidade(), obj.get_senha(), obj.get_foto()))
         self.fechar()
 
 
@@ -18,7 +18,7 @@ class ProfissionalDAO(DAO):
         sql = "SELECT * FROM profissional"
         cursor = self.execute(sql)
         rows = cursor.fetchall()
-        objs = [Profissional(id, nome, email, especialidade, senha) for (id, nome, email, especialidade, senha) in rows]
+        objs = [Profissional(id, nome, email, especialidade, senha, foto) for (id, nome, email, especialidade, senha, foto) in rows]
         self.fechar()
         return objs
 
@@ -34,10 +34,10 @@ class ProfissionalDAO(DAO):
     def atualizar(self, obj):
         self.abrir()
         sql = """
-            UPDATE profissional SET nome=?, email=?, especialidade=?, senha=?
+            UPDATE profissional SET nome=?, email=?, especialidade=?, senha=?, foto=?
             WHERE id=?
         """
-        self.execute(sql, (obj.get_nome(), obj.get_email(), obj.get_especialidade(), obj.get_senha(), obj.get_id()))
+        self.execute(sql, (obj.get_nome(), obj.get_email(), obj.get_especialidade(), obj.get_senha(), obj.get_foto(), obj.get_id()))
         self.fechar()
 
     def excluir(self, id):

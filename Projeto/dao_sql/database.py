@@ -37,7 +37,8 @@ class Database:
                 nome TEXT NOT NULL,
                 email TEXT NOT NULL,
                 fone TEXT,
-                senha TEXT NOT NULL
+                senha TEXT NOT NULL,
+                foto BLOB
             );
         """)
 
@@ -48,7 +49,8 @@ class Database:
                 nome TEXT NOT NULL,
                 email TEXT NOT NULL,
                 especialidade TEXT NULL,
-                senha TEXT NOT NULL
+                senha TEXT NOT NULL,
+                foto BLOB
             );
         """)
 
@@ -91,3 +93,18 @@ class Database:
                 FOREIGN KEY (id_horario) REFERENCES horario(id) ON DELETE CASCADE
             );
         """)
+
+        cls.adicionar_coluna_caso_nao_exista("cliente", "foto", "BLOB")
+        cls.adicionar_coluna_caso_nao_exista("profissional", "foto", "BLOB")
+
+    @classmethod
+    def adicionar_coluna_caso_nao_exista(cls, tabela, coluna, tipo):
+        cursor = cls.conn.cursor()
+
+        cursor.execute(f"PRAGMA table_info({tabela})")
+        colunas = [linha[1] for linha in cursor.fetchall()]
+
+        if coluna not in colunas:
+            cls.executar(
+                f"ALTER TABLE {tabela} ADD COLUMN {coluna} {tipo}"
+            )

@@ -26,9 +26,13 @@ class ManterProfissionalUI:
         email = st.text_input("Informe o e-mail")
         especialidade = st.text_input("Informe a especialidade")
         senha = st.text_input("Informe a senha", type="password")
+        if op.get_foto():
+            st.image(op.get_foto(), width=150, caption="Foto atual")
+        foto = st.file_uploader("Selecione uma foto", type=["png", "jpg", "jpeg", "webp"])
         if st.button("Inserir"):
             try:
-                Service.profissional_inserir(nome, email, especialidade, senha)
+                imagem = foto.getvalue() if foto is not None else None
+                Service.profissional_inserir(nome, email, especialidade, senha, imagem)
                 st.success("Profissional inserido com sucesso")
                 time.sleep(2)
                 st.rerun()
