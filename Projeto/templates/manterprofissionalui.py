@@ -26,9 +26,13 @@ class ManterProfissionalUI:
         email = st.text_input("Informe o e-mail")
         especialidade = st.text_input("Informe a especialidade")
         senha = st.text_input("Informe a senha", type="password")
-        if op.get_foto():
-            st.image(op.get_foto(), width=150, caption="Foto atual")
         foto = st.file_uploader("Selecione uma foto", type=["png", "jpg", "jpeg", "webp"])
+        if foto is not None:
+            st.image(
+                foto,
+                caption="Pré-visualização da foto",
+                width=150
+            )
         if st.button("Inserir"):
             try:
                 imagem = foto.getvalue() if foto is not None else None
@@ -48,11 +52,20 @@ class ManterProfissionalUI:
             email = st.text_input("Informe o novo email", op.get_email())
             especialidade = st.text_input("Informe a nova especialidade", op.get_especialidade())
             senha = st.text_input("Nova senha", op.get_senha(), type="password")
+            if op.get_foto(): st.image(op.get_foto(), width=150, caption="Foto atual")
+            foto = st.file_uploader("Selecione uma nova foto",type=["png", "jpg", "jpeg", "webp"])
+            if foto is not None:
+                st.image(
+                    foto,
+                    caption="Pré-visualização da foto",
+                    width=150
+                )
 
             if st.button("Atualizar"):
                 try:
                     id = op.get_id()
-                    Service.profissional_atualizar(id, nome, email, especialidade, senha)
+                    imagem = foto.getvalue() if foto is not None else None
+                    Service.profissional_atualizar(id, nome, email, especialidade, senha, imagem)
                     st.success("Profissional atualizado com sucesso")
                     time.sleep(2)
                     st.rerun()

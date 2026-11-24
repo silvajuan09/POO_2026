@@ -25,6 +25,12 @@ class ManterClienteUI:
         fone = st.text_input("Informe o fone")
         senha = st.text_input("Informe a senha", type="password")
         foto = st.file_uploader("Selecione uma foto", type=["jpg", "jpeg", "png", "webp"])
+        if foto is not None:
+            st.image(
+                foto,
+                caption="Pré-visualização da foto",
+                width=150
+            )
         if st.button("Inserir"):
             try:
                 imagem = foto.getvalue() if foto is not None else None
@@ -45,7 +51,13 @@ class ManterClienteUI:
             senha = st.text_input("Nova senha", op.get_senha(), type="password")
             if op.get_foto():
                 st.image(op.get_foto(), width=150, caption="Foto atual")
-            foto = st.file_uploader("Selecione uma nova foto",type=["png", "jpg", "jpeg", "webp"])
+            foto = st.file_uploader("Selecione uma nova foto", type=["png", "jpg", "jpeg", "webp"])
+            if foto is not None:
+                st.image(
+                    foto,
+                    caption="Pré-visualização da foto",
+                    width=150
+                )
 
             if st.button("Atualizar"):
                 try:

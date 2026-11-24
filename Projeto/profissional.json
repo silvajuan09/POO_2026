@@ -12,5 +12,12 @@
     "email": "samara",
     "especialidade": "Ortopedista",
     "senha": "samara"
+  },
+  {
+    "id": 3,
+    "nome": "yasmim",
+    "email": "yasmim@gmail.com",
+    "especialidade": "Dermatologista",
+    "senha": "yasmim"
   }
 ]
