@@ -14,6 +14,9 @@ from templates.confirmarservicoui import ConfirmarServicoUI
 from templates.alterarsenhaui import AlterarSenhaUI
 from templates.listarhorariosnaoconfirmadoshojeui import ListarHorariosNaoConfirmadosHojeUI
 from templates.listaragendaclienteui import ListarAgendaClienteUI
+from templates.registraratendimentoui import RegistrarAtendimentoUI
+from templates.totalizaratendimentosprofissionaisui import TotalizarAtendimentosProfissionaisUI
+from templates.totalizarmeusatendimentosui import TotalizarMeusAtendimentosUI
 from service import Service
 import streamlit as st
 from dao_sql.database import Database
@@ -58,6 +61,8 @@ class IndexUI:
                 "Abrir Minha Agenda",
                 "Minha Agenda",
                 "Confirmar Serviço",
+                "Registrar Atendimento",
+                "Totalizar Meus Atendimentos",
                 "Alterar Senha"
             ]
         )
@@ -74,6 +79,12 @@ class IndexUI:
         if op == "Confirmar Serviço":
             ConfirmarServicoUI.main()
         
+        if op == "Registrar Atendimento":
+            RegistrarAtendimentoUI.main()
+
+        if op == "Totalizar Meus Atendimentos":
+            TotalizarMeusAtendimentosUI.main()
+
         if op == "Alterar Senha":
             AlterarSenhaUI.main()
 
@@ -87,6 +98,7 @@ class IndexUI:
                 "Profissionais",
                 "Horários não confirmados de hoje",
                 "Agenda de cliente",
+                "Totalizar atendimentos dos profissionais",
                 "Alterar Senha"
             ]
         )
@@ -108,6 +120,9 @@ class IndexUI:
 
         if op == "Agenda de cliente":
             ListarAgendaClienteUI.main()
+
+        if op == "Totalizar atendimentos dos profissionais":
+            TotalizarAtendimentosProfissionaisUI.main()
 
         if op == "Alterar Senha":
             AlterarSenhaUI.main()

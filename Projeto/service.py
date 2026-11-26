@@ -366,8 +366,125 @@ class Service:
 
 
     @staticmethod
+    def atendimento_totalizar_profissionais(data_inicial, data_final):
+        if data_inicial > data_final:
+            raise ValueError("A data inicial deve ser anterior à data final")
+
+        profissionais = Service.profissional_listar()
+        horarios = {h.get_id(): h for h in Service.horario_listar()}
+
+        totais = {
+            p.get_id(): {
+                "Profissional": p.get_nome(),
+                "Atendimentos": 0
+            }
+            for p in profissionais
+        }
+
+        for atendimento in Service.atendimento_listar():
+            data = atendimento.get_data().date()
+
+            if data_inicial <= data <= data_final:
+                horario = horarios.get(atendimento.get_id_horario())
+
+                if horario is not None:
+                    id_profissional = horario.get_id_profissional()
+                    if id_profissional in totais:
+                        totais[id_profissional]["Atendimentos"] += 1
+
+        return list(totais.values())
+
+    
+    @staticmethod
+    def atendimento_totalizar_servicos_profissional(id_profissional, data_inicial, data_final):
+        if data_inicial > data_final:
+            raise ValueError("A data inicial deve ser anterior à data final")
+
+        servicos = Service.servico_listar()
+        horarios = {h.get_id(): h for h in Service.horario_listar()}
+
+        totais = {
+            s.get_id(): {
+                "Serviço": s.get_descricao(),
+                "Quantidade": 0
+            }
+            for s in servicos
+        }
+
+        for atendimento in Service.atendimento_listar():
+            data = atendimento.get_data().date()
+
+            if data_inicial <= data <= data_final:
+                horario = horarios.get(atendimento.get_id_horario())
+
+                if horario is not None:
+                    if horario.get_id_profissional() == id_profissional:
+                        id_servico = horario.get_id_servico()
+                        if id_servico in totais:
+                            totais[id_servico]["Quantidade"] += 1
+
+        return list(totais.values())
+
+
+    @staticmethod
     def atendimento_listar_id(id):
         return AtendimentoDAO().listar_id(id)
+
+    @staticmethod
+    def horario_listar_para_registrar_atendimento(id_profissional):
+        horarios = Service.horario_listar_profissional(id_profissional)
+        atendimentos = Service.atendimento_listar()
+        ids_atendidos = {a.get_id_horario() for a in atendimentos}
+        agora = datetime.now()
+        resultado = []
+
+        for h in horarios:
+            if h.get_confirmado() \
+            and h.get_id_cliente() not in [None, 0] \
+            and h.get_data() <= agora \
+            and h.get_id() not in ids_atendidos:
+                resultado.append(h)
+        return resultado
+
+
+    @staticmethod
+    def atendimento_registrar(
+        id_horario,
+        id_profissional,
+        queixa_principal,
+        historico_saude,
+        avaliacao,
+        prescricao
+    ):
+
+        horario = Service.horario_listar_id(id_horario)
+
+        if horario is None:
+            raise ValueError("Horário não encontrado")
+
+        if horario.get_id_profissional() != id_profissional:
+            raise ValueError("Este horário não pertence a você")
+
+        if not horario.get_confirmado():
+            raise ValueError("O horário precisa estar confirmado")
+
+        if horario.get_id_cliente() in [None, 0]:
+            raise ValueError("Este horário não possui cliente")
+
+        # Impede registrar duas vezes o mesmo atendimento.
+        for atendimento in Service.atendimento_listar():
+
+            if atendimento.get_id_horario() == id_horario:
+                raise ValueError("Este atendimento já foi registrado")
+
+        Service.atendimento_inserir(
+            horario.get_data(),
+            queixa_principal,
+            historico_saude,
+            avaliacao,
+            prescricao,
+            id_horario
+        )
 
 
     @staticmethod
